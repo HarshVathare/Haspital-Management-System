@@ -1,52 +1,28 @@
-package com.LearnSpringBoot.InternalWorkingSpringBoot.entity;
+package com.LearnSpringBoot.InternalWorkingSpringBoot.dto;
 
-import jakarta.persistence.*;
-import lombok.Builder;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import jakarta.persistence.Column;
 
-import java.util.Collection;
-import java.util.List;
+public class SignupRequestDTO {
 
-@Entity
-public class User implements UserDetails {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
     private String firstname;
 
-    @Column(nullable = false)
     private String lastname;
 
-    @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
     private String password;
 
-    public User() {
+    public SignupRequestDTO() {
     }
 
-    public User(Long id, String firstname, String lastname, String username, String email, String password) {
-        this.id = id;
+    public SignupRequestDTO(String firstname, String lastname, String username, String email, String password) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.username = username;
         this.email = email;
         this.password = password;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getFirstname() {
@@ -79,11 +55,6 @@ public class User implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
     }
 
     public String getPassword() {

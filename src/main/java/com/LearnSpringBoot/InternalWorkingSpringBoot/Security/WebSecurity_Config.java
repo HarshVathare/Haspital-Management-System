@@ -10,15 +10,18 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurity_Config {
 
     private final PasswordEncoder passwordEncoder;
+    private final JwtAuthFilter jwtAuthFilter;
 
-    public WebSecurity_Config(PasswordEncoder passwordEncoder) {
+    public WebSecurity_Config(PasswordEncoder passwordEncoder, JwtAuthFilter jwtAuthFilter) {
         this.passwordEncoder = passwordEncoder;
+        this.jwtAuthFilter = jwtAuthFilter;
     }
 
     @Bean
@@ -33,11 +36,12 @@ public class WebSecurity_Config {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth->auth
                 .requestMatchers("/public/**","/auth/**").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/doctor/**").hasAnyRole("ADMIN", "DOCTOR")
-        );
+                                .requestMatchers("/admin/**").authenticated()
+//                .requestMatchers("/admin/**").hasRole("ADMIN")
+//                .requestMatchers("/doctor/**").hasAnyRole("ADMIN", "DOCTOR")
+        )
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
        return http.build();
     }
-
 
 }

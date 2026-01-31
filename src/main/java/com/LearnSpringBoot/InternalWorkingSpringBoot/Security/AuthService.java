@@ -66,14 +66,4 @@ public class AuthService {
         return new SignupResponceDTO(savedUser.getId(), savedUser.getUsername());
     }
 
-
-//    public SignupResponceDTO Signup(SignupRequestDTO signupRequestDTO) {
-//        User user = userRepository.findByUsername(signupRequestDTO.getUsername()).orElseThrow(()->new IllegalArgumentException("User not found"));
-//        if(user != null) throw new IllegalArgumentException("User already exists");
-//
-//        user = userRepository.save(new User(user.getId(), user.getFirstname(), user.getLastname(), user.getUsername(), user.getEmail(), user.getPassword()));
-//
-//        return new SignupResponceDTO(user.getId(), user.getUsername());
-//
-//    }
 }

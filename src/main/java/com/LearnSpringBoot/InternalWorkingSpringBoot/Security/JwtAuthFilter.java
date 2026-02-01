@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 
@@ -18,36 +19,43 @@ import java.io.IOException;
 @Slf4j //for logging purpose
 public class JwtAuthFilter extends OncePerRequestFilter {
 
+    private final HandlerExceptionResolver handlerExceptionResolver;
     private final AuthUtill authUtill;
     private final UserRepository userRepository;
 
-    public JwtAuthFilter(AuthUtill authUtill, UserRepository userRepository) {
+    public JwtAuthFilter(HandlerExceptionResolver handlerExceptionResolver, AuthUtill authUtill, UserRepository userRepository) {
+        this.handlerExceptionResolver = handlerExceptionResolver;
         this.authUtill = authUtill;
         this.userRepository = userRepository;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        logger.info("incoming request ..!"); request.getRequestURI();
-        final String requestTokenHeader = request.getHeader("Authorization"); //getting Token data
+       try {
+           logger.info("incoming request ..!");
+           request.getRequestURI();
+           final String requestTokenHeader = request.getHeader("Authorization"); //getting Token data
 
-        if(requestTokenHeader == null || !requestTokenHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+           if (requestTokenHeader == null || !requestTokenHeader.startsWith("Bearer ")) {
+               filterChain.doFilter(request, response);
+               return;
+           }
 
-        String Token = requestTokenHeader.split("Bearer ")[1]; //store only 1th index data
-        String username = authUtill.getUsernameFromToken(Token); //getting username
+           String Token = requestTokenHeader.split("Bearer ")[1]; //store only 1th index data
+           String username = authUtill.getUsernameFromToken(Token); //getting username
 
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            User user = userRepository.findByUsername(username).orElseThrow();
+           if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+               User user = userRepository.findByUsername(username).orElseThrow();
 
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                    new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+               UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                       new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 
-            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-        }
+               SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+           }
 
-        filterChain.doFilter(request, response);
+           filterChain.doFilter(request, response);
+       }catch (Exception ex) {
+           handlerExceptionResolver.resolveException(request, response, null, ex);
+       }
     }
 }

@@ -5,6 +5,7 @@ public class LoginResponceDTO {
 
     Long userId;
 
+
     public LoginResponceDTO(String jwt, Long userId) {
         this.jwt = jwt;
         this.userId = userId;

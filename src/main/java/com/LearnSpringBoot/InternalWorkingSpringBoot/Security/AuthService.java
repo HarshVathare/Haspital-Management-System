@@ -5,6 +5,7 @@ import com.LearnSpringBoot.InternalWorkingSpringBoot.dto.LoginResponceDTO;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.dto.SignupRequestDTO;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.dto.SignupResponceDTO;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.User;
+import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.type.RoleType;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Optional;
 
 @Service
@@ -60,6 +62,7 @@ public class AuthService {
         user.setUsername(signupRequestDTO.getUsername());
         user.setEmail(signupRequestDTO.getEmail());
         user.setPassword(passwordEncoder.encode(signupRequestDTO.getPassword()));
+        user.setRoles(Collections.singleton(RoleType.PATIENT));
 
         User savedUser = userRepository.save(user);
 

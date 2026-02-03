@@ -21,8 +21,12 @@ public class Doctor {
     @Column(length = 100)
     private String specialization;
 
-    @Column(unique = true, length = 100)
+    @Column(nullable = false, unique = true, length = 100)
     private String email;
+
+    @OneToOne
+    @MapsId
+    private User user;
 
     @ManyToMany(mappedBy = "doctors")
     private Set<Department> departments = new HashSet<>();
@@ -33,11 +37,12 @@ public class Doctor {
     public Doctor() {
     }
 
-    public Doctor(Long id, String name, String specialization, String email, Set<Department> departments, List<Appointment> appointments) {
+    public Doctor(Long id, String name, String specialization, String email, User user, Set<Department> departments, List<Appointment> appointments) {
         this.id = id;
         this.name = name;
         this.specialization = specialization;
         this.email = email;
+        this.user = user;
         this.departments = departments;
         this.appointments = appointments;
     }
@@ -88,6 +93,14 @@ public class Doctor {
 
     public void setAppointments(List<Appointment> appointments) {
         this.appointments = appointments;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

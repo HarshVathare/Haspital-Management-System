@@ -4,8 +4,10 @@ import com.LearnSpringBoot.InternalWorkingSpringBoot.dto.LoginRequestDTO;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.dto.LoginResponceDTO;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.dto.SignupRequestDTO;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.dto.SignupResponceDTO;
+import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.Patient;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.User;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.type.RoleType;
+import com.LearnSpringBoot.InternalWorkingSpringBoot.repository.PatientRepository;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +21,8 @@ import java.util.Optional;
 @Service
 public class AuthService {
 
+    private final PatientRepository patientRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final AuthUtill authUtill;
@@ -27,7 +31,8 @@ public class AuthService {
 
     private final UserRepository userRepository;
 
-    public AuthService(PasswordEncoder passwordEncoder, AuthUtill authUtill, AuthenticationManager authenticationManager, UserRepository userRepository) {
+    public AuthService(PatientRepository patientRepository, PasswordEncoder passwordEncoder, AuthUtill authUtill, AuthenticationManager authenticationManager, UserRepository userRepository) {
+        this.patientRepository = patientRepository;
         this.passwordEncoder = passwordEncoder;
         this.authUtill = authUtill;
         this.authenticationManager = authenticationManager;
@@ -65,6 +70,13 @@ public class AuthService {
         user.setRoles(Collections.singleton(RoleType.PATIENT));
 
         User savedUser = userRepository.save(user);
+
+        Patient patient = new Patient();
+        patient.setName(user.getUsername());
+        patient.setEmail(user.getEmail());
+        patient.setUser(user);
+
+        patientRepository.save(patient);
 
         return new SignupResponceDTO(savedUser.getId(), savedUser.getUsername());
     }

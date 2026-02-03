@@ -36,6 +36,10 @@ public class Patient {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @OneToOne
+    @MapsId // this annotation means userId == PatientId
+    private User user;
+
     private String gender;
 
     @CreationTimestamp
@@ -55,11 +59,12 @@ public class Patient {
     public Patient() {
     }
 
-    public Patient(Long id, String name, LocalDate birthDate, String email, String gender, LocalDateTime createdAt, BloodGroupType bloodGroup, Insurance insurance, List<Appointment> appointments) {
+    public Patient(Long id, String name, LocalDate birthDate, String email, User user, String gender, LocalDateTime createdAt, BloodGroupType bloodGroup, Insurance insurance, List<Appointment> appointments) {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
         this.email = email;
+        this.user = user;
         this.gender = gender;
         this.createdAt = createdAt;
         this.bloodGroup = bloodGroup;
@@ -137,6 +142,14 @@ public class Patient {
 
     public void setAppointments(List<Appointment> appointments) {
         this.appointments = appointments;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

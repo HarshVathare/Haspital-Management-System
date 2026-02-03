@@ -25,10 +25,10 @@ public class PatientController {
         this.appointmentService = appointmentService;
     }
 
-    @PostMapping("/appointments")
-    public ResponseEntity<AppointmentResponseDto> createNewAppointment(@RequestBody CreateAppointmentRequestDto createAppointmentRequestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(appointmentService.createNewAppointment(createAppointmentRequestDto));
-    }
+//    @PostMapping("/appointments")
+//    public ResponseEntity<AppointmentResponseDto> createNewAppointment(@RequestBody CreateAppointmentRequestDto createAppointmentRequestDto) {
+//        return ResponseEntity.status(HttpStatus.CREATED).body(appointmentService.createNewAppointment(createAppointmentRequestDto));
+//    }
 
     @GetMapping("/profile/{patientId}")
     private ResponseEntity<PatientResponseDto> getPatientProfile(@PathVariable Long patientId) {

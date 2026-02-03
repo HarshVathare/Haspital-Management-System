@@ -33,30 +33,28 @@ public class AppointmentService {
         this.modelMapper = modelMapper;
     }
 
-    @Transactional
-    public AppointmentResponseDto createNewAppointment(CreateAppointmentRequestDto createAppointmentRequestDto) {
-        Long doctorId = createAppointmentRequestDto.getDoctorId();
-        Long patientId = createAppointmentRequestDto.getPatientId();
-
-        Patient patient = patientRepository.findById(patientId)
-                .orElseThrow(() -> new EntityNotFoundException("Patient not found with ID: " + patientId));
-        Doctor doctor = doctorRepository.findById(doctorId)
-                .orElseThrow(() -> new EntityNotFoundException("Doctor not found with ID: " + doctorId));
+//    @Transactional
+//
+//    public AppointmentResponseDto createNewAppointment(CreateAppointmentRequestDto createAppointmentRequestDto) {
+//        Long doctorId = createAppointmentRequestDto.getDoctorId();
+//        Long patientId = createAppointmentRequestDto.getPatientId();
+//
+//        Patient patient = patientRepository.findById(patientId)
+//                .orElseThrow(() -> new EntityNotFoundException("Patient not found with ID: " + patientId));
+//        Doctor doctor = doctorRepository.findById(doctorId)
+//                .orElseThrow(() -> new EntityNotFoundException("Doctor not found with ID: " + doctorId));
 //        Appointment appointment = Appointment.builder()
 //                .reason(createAppointmentRequestDto.getReason())
 //                .appointmentTime(createAppointmentRequestDto.getAppointmentTime())
 //                .build();
-        Appointment appointment = new Appointment();
-        appointment.setReason(createAppointmentRequestDto.getReason());
-        appointment.setAppointmentTime(createAppointmentRequestDto.getAppointmentTime());
-
-        appointment.setPatient(patient);
-        appointment.setDoctor(doctor);
-        patient.getAppointments().add(appointment); // to maintain consistency
-
-        appointment = appointmentRepository.save(appointment);
-        return modelMapper.map(appointment, AppointmentResponseDto.class);
-    }
+//
+//        appointment.setPatient(patient);
+//        appointment.setDoctor(doctor);
+//        patient.getAppointments().add(appointment); // to maintain consistency
+//
+//        appointment = appointmentRepository.save(appointment);
+//        return modelMapper.map(appointment, AppointmentResponseDto.class);
+//    }
 
     @Transactional
 //    @PreAuthorize("hasAuthority('appointment:write') or #doctorId == authentication.principal.id")

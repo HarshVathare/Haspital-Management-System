@@ -1,5 +1,6 @@
 package com.LearnSpringBoot.InternalWorkingSpringBoot.Security;
 
+import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.type.RoleType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +12,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static com.LearnSpringBoot.InternalWorkingSpringBoot.entity.type.RoleType.ADMIN;
+import static com.LearnSpringBoot.InternalWorkingSpringBoot.entity.type.RoleType.DOCTOR;
 
 @Configuration
 @EnableWebSecurity
@@ -36,7 +40,8 @@ public class WebSecurity_Config {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth->auth
                 .requestMatchers("/public/**","/auth/**").permitAll()
-                                .requestMatchers("/admin/**").authenticated()
+                                .requestMatchers("/admin/**").hasRole(ADMIN.name())
+                                .requestMatchers("/doctors/**").hasAnyRole(DOCTOR.name(), ADMIN.name())
                                 .anyRequest().authenticated()
 //                .requestMatchers("/admin/**").hasRole("ADMIN")
 //                .requestMatchers("/doctor/**").hasAnyRole("ADMIN", "DOCTOR")

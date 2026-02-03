@@ -4,10 +4,12 @@ package com.LearnSpringBoot.InternalWorkingSpringBoot.controller;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.dto.AppointmentResponseDto;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.dto.CreateAppointmentRequestDto;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.dto.PatientResponseDto;
+import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.User;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.service.AppointmentService;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.service.PatientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

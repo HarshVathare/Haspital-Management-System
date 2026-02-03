@@ -3,10 +3,13 @@ package com.LearnSpringBoot.InternalWorkingSpringBoot.service;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.dto.DoctorResponseDto;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.dto.OnboardDoctorRequestDto;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.Doctor;
+import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.User;
+import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.type.RoleType;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.repository.DoctorRepository;
+import com.LearnSpringBoot.InternalWorkingSpringBoot.repository.UserRepository;
 import jakarta.transaction.Transactional;
 
-import org.apache.catalina.User;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +22,13 @@ public class DoctorService {
 
     private final DoctorRepository doctorRepository;
     private final ModelMapper modelMapper;
-//    private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public DoctorService(DoctorRepository doctorRepository, ModelMapper modelMapper) {
+    public DoctorService(DoctorRepository doctorRepository, ModelMapper modelMapper, UserRepository userRepository) {
         this.doctorRepository = doctorRepository;
         this.modelMapper = modelMapper;
 
+        this.userRepository = userRepository;
     }
 
     public List<DoctorResponseDto> getAllDoctors() {
@@ -35,22 +39,28 @@ public class DoctorService {
     }
 
 
-//    @Transactional
-//    public DoctorResponseDto onBoardNewDoctor(OnboardDoctorRequestDto onBoardDoctorRequestDto) {
-//        User user = userRepository.findById(onBoardDoctorRequestDto.getUserId()).orElseThrow();
-//
-//        if(doctorRepository.existsById(onBoardDoctorRequestDto.getUserId())) {
-//            throw new IllegalArgumentException("Already a doctor");
-//        }
-//
-//        Doctor doctor = Doctor.builder()
-//                .name(onBoardDoctorRequestDto.getName())
-//                .specialization(onBoardDoctorRequestDto.getSpecialization())
-//                .user(user)
-//                .build();
-//
-//        user.getRoles().add(RoleType.DOCTOR);
-//
-//        return modelMapper.map(doctorRepository.save(doctor), DoctorResponseDto.class);
-//    }
+    @Transactional
+    public DoctorResponseDto onBoardNewDoctor(OnboardDoctorRequestDto dto) {
+
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (doctorRepository.existsByUserId(dto.getUserId())) {
+            throw new IllegalArgumentException("Already a doctor");
+        }
+
+        Doctor doctor = new Doctor();
+        doctor.setName(dto.getName());
+        doctor.setSpecialization(dto.getSpecialization());
+        doctor.setEmail(dto.getEmail());
+        doctor.setUser(user);
+
+        // Add role to user
+        user.getRoles().add(RoleType.DOCTOR);
+
+        Doctor savedDoctor = doctorRepository.save(doctor);
+
+        return modelMapper.map(savedDoctor, DoctorResponseDto.class);
+    }
+
 }

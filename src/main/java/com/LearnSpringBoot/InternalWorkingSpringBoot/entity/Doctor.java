@@ -1,6 +1,7 @@
 package com.LearnSpringBoot.InternalWorkingSpringBoot.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-
+@Builder
 public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

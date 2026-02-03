@@ -4,14 +4,16 @@ public class OnboardDoctorRequestDto {
     private Long userId;
     private String specialization;
     private String name;
+    private String email;
 
     public OnboardDoctorRequestDto() {
     }
 
-    public OnboardDoctorRequestDto(Long userId, String specialization, String name) {
+    public OnboardDoctorRequestDto(Long userId, String specialization, String name, String email) {
         this.userId = userId;
         this.specialization = specialization;
         this.name = name;
+        this.email = email;
     }
 
     public Long getUserId() {
@@ -36,6 +38,14 @@ public class OnboardDoctorRequestDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override

@@ -72,12 +72,12 @@ public class AppointmentService {
     }
 
 //    @PreAuthorize("hasRole('ADMIN') OR (hasRole('DOCTOR') AND #doctorId == authentication.principal.id)")
-//    public List<AppointmentResponseDto> getAllAppointmentsOfDoctor(Long doctorId) {
-//        Doctor doctor = doctorRepository.findById(doctorId).orElseThrow();
-//
-//        return doctor.getAppointments()
-//                .stream()
-//                .map(appointment -> modelMapper.map(appointment, AppointmentResponseDto.class))
-//                .collect(Collectors.toList());
-//    }
+    public List<AppointmentResponseDto> getAllAppointmentsOfDoctor(Long doctorId) {
+        Doctor doctor = doctorRepository.findById(doctorId).orElseThrow();
+
+        return doctor.getAppointments()
+                .stream()
+                .map(appointment -> modelMapper.map(appointment, AppointmentResponseDto.class))
+                .collect(Collectors.toList());
+    }
 }

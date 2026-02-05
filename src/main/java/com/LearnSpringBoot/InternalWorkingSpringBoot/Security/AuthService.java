@@ -67,7 +67,7 @@ public class AuthService {
         user.setUsername(signupRequestDTO.getUsername());
         user.setEmail(signupRequestDTO.getEmail());
         user.setPassword(passwordEncoder.encode(signupRequestDTO.getPassword()));
-        user.setRoles(Collections.singleton(RoleType.ADMIN));
+        user.setRoles(Collections.singleton(RoleType.PATIENT));
 
         User savedUser = userRepository.save(user);
 

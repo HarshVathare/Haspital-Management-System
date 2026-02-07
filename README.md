@@ -1,19 +1,13 @@
-Perfect Harsh 👍
-Here is a **professional industry-level README.md** for your **Hospital Management System with Appointment & Insurance + Admin Role Conversion** project.
-You can directly copy this into your GitHub repository.
-
----
-
-# 🏥 Hospital Management System API (Spring Boot)
+ 🏥 Hospital Management System API (Spring Boot)
 
 A complete **Hospital Management System backend API** built using **Spring Boot** following real industry standards.
 The system supports **User Management, Role Conversion (Patient → Doctor), Appointment Booking, Insurance Claims, Billing, and Admin Dashboard** with **JWT Authentication & Role-Based Authorization**.
 
 ---
 
-## 🚀 Features
+🚀 Features
 
-### 🔐 Authentication & Authorization
+ 🔐 Authentication & Authorization
 
 * JWT based login & registration
 * Role-based access control (ADMIN, DOCTOR, PATIENT, INSURANCE_AGENT)
@@ -22,7 +16,7 @@ The system supports **User Management, Role Conversion (Patient → Doctor), App
 
 ---
 
-### 🧑‍💼 Admin Module
+ 🧑‍💼 Admin Module
 
 * Convert Patient to Doctor
 * Convert User to Insurance Agent
@@ -33,7 +27,7 @@ The system supports **User Management, Role Conversion (Patient → Doctor), App
 
 ---
 
-### 👨‍⚕️ Doctor Module
+ 👨‍⚕️ Doctor Module
 
 * Manage profile & specialization
 * View assigned appointments
@@ -42,7 +36,7 @@ The system supports **User Management, Role Conversion (Patient → Doctor), App
 
 ---
 
-### 🧑‍🤝‍🧑 Patient Module
+ 🧑‍🤝‍🧑 Patient Module
 
 * Book appointments with doctors
 * View appointment history
@@ -51,7 +45,7 @@ The system supports **User Management, Role Conversion (Patient → Doctor), App
 
 ---
 
-### 📅 Appointment Module
+ 📅 Appointment Module
 
 * Book / Cancel / Reschedule appointments
 * Slot availability validation
@@ -59,7 +53,7 @@ The system supports **User Management, Role Conversion (Patient → Doctor), App
 
 ---
 
-### 🏥 Insurance Module
+ 🏥 Insurance Module
 
 * Manage insurance policies
 * Apply for insurance claims
@@ -68,7 +62,7 @@ The system supports **User Management, Role Conversion (Patient → Doctor), App
 
 ---
 
-### 💳 Billing & Payment Module
+ 💳 Billing & Payment Module
 
 * Generate bill after appointment
 * Calculate insurance coverage
@@ -77,7 +71,7 @@ The system supports **User Management, Role Conversion (Patient → Doctor), App
 
 ---
 
-## 🧱 Tech Stack
+ 🧱 Tech Stack
 
 **Backend**
 
@@ -96,7 +90,7 @@ The system supports **User Management, Role Conversion (Patient → Doctor), App
 
 ---
 
-## 🏗 Project Structure
+ 🏗 Project Structure
 
 ```
 src/main/java/com/example/hms
@@ -114,7 +108,7 @@ src/main/java/com/example/hms
 
 ---
 
-## 🗃 Database Entities
+ 🗃 Database Entities
 
 * Users
 * Doctors
@@ -129,7 +123,7 @@ src/main/java/com/example/hms
 
 ---
 
-## 🔐 Security
+ 🔐 Security
 
 * JWT Authentication
 * Role Based Authorization
@@ -140,24 +134,23 @@ src/main/java/com/example/hms
 
 ---
 
-## 📌 Main APIs (Sample)
+ 📌 Main APIs (Sample)
 
-### Auth
+ Auth
 
 ```
 POST   /api/auth/register
 POST   /api/auth/login
 ```
 
-### Admin
+ Admin
 
 ```
 PUT /api/admin/convert-to-doctor/{userId}
 PUT /api/admin/approve-doctor/{doctorId}
 PUT /api/admin/block-user/{userId}
 ```
-
-### Appointment
+ Appointment
 
 ```
 POST /api/appointments
@@ -165,7 +158,7 @@ GET  /api/appointments/patient/{id}
 PUT  /api/appointments/{id}/cancel
 ```
 
-### Insurance
+ Insurance
 
 ```
 POST /api/insurance/claim
@@ -174,7 +167,7 @@ PUT  /api/insurance/claims/{id}/approve
 
 ---
 
-## ⚙ Setup Instructions
+ ⚙ Setup Instructions
 
 1. Clone repository
 
@@ -206,7 +199,7 @@ http://localhost:8080/swagger-ui.html
 
 ---
 
-## 🧪 Testing
+ 🧪 Testing
 
 * Use Postman or Swagger UI for API testing
 * JWT token required for secured APIs
@@ -214,7 +207,7 @@ http://localhost:8080/swagger-ui.html
 
 ---
 
-## 🌟 Future Enhancements
+ 🌟 Future Enhancements
 
 * Email & SMS notifications
 * PDF invoice generation
@@ -224,29 +217,3 @@ http://localhost:8080/swagger-ui.html
 * Cloud hosting (AWS / Azure)
 
 ---
-
-## 👨‍💻 Developer
-
-**Name:** Harsh
-**Role:** Java Backend Developer
-**Tech:** Spring Boot, REST API, JWT, MySQL
-
----
-
-## 📄 License
-
-This project is for learning and portfolio purposes.
-
----
-
-If you want, I can also give you:
-✅ **Short README version (1 page)**
-✅ **README with API documentation section**
-✅ **README with Architecture diagram**
-✅ **README for internship-ready GitHub project**
-
-Just say which one you want:
-**1️⃣ Short README**
-**2️⃣ Detailed README with API docs**
-**3️⃣ README with Architecture Diagram**
-**4️⃣ Internship-ready README (best)**

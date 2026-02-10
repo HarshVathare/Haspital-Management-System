@@ -1,6 +1,4 @@
-package com.LearnSpringBoot.InternalWorkingSpringBoot.dto;
-
-import jakarta.persistence.Column;
+package com.LearnSpringBoot.InternalWorkingSpringBoot.dto.AuthDTO;
 
 public class SignupRequestDTO {
 

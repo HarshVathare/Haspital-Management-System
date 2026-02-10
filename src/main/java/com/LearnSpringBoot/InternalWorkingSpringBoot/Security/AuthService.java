@@ -1,14 +1,12 @@
 package com.LearnSpringBoot.InternalWorkingSpringBoot.Security;
 
-import com.LearnSpringBoot.InternalWorkingSpringBoot.dto.LoginRequestDTO;
-import com.LearnSpringBoot.InternalWorkingSpringBoot.dto.LoginResponceDTO;
-import com.LearnSpringBoot.InternalWorkingSpringBoot.dto.SignupRequestDTO;
-import com.LearnSpringBoot.InternalWorkingSpringBoot.dto.SignupResponceDTO;
+import com.LearnSpringBoot.InternalWorkingSpringBoot.dto.AuthDTO.*;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.Patient;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.User;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.type.RoleType;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.repository.PatientRepository;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.repository.UserRepository;
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -83,5 +81,7 @@ public class AuthService {
     }
 
 
-
+    public @Nullable RefreshTokenResponceDTO getRefreshToken(RefreshTokenRequestDTO refreshTokenRequestDTO) {
+         return null;
+    }
 }

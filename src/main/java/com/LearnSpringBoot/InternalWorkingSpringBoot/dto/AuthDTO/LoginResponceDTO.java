@@ -1,10 +1,11 @@
-package com.LearnSpringBoot.InternalWorkingSpringBoot.dto;
+package com.LearnSpringBoot.InternalWorkingSpringBoot.dto.AuthDTO;
 
 public class LoginResponceDTO {
     String jwt;
 
     Long userId;
 
+    String refreshToken;
 
     public LoginResponceDTO(String jwt, Long userId) {
         this.jwt = jwt;

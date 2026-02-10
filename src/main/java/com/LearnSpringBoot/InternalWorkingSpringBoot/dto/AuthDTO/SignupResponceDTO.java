@@ -1,4 +1,4 @@
-package com.LearnSpringBoot.InternalWorkingSpringBoot.dto;
+package com.LearnSpringBoot.InternalWorkingSpringBoot.dto.AuthDTO;
 
 public class SignupResponceDTO {
     Long id;

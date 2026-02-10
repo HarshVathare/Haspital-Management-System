@@ -134,14 +134,17 @@ src/main/java/com/example/hms
 
 ---
 
- 📌 Main APIs (Sample)
+ System – API Endpoint List
+🔐 1. Authentication &    Authorization
 
- Auth
-
-```
+Public
 POST   /api/auth/register
 POST   /api/auth/login
-```
+POST   /api/auth/refresh-token
+POST   /api/auth/forgot-password
+POST   /api/auth/reset-password
+GET    /api/auth/verify-email
+POST   /api/auth/logout
 
  Admin
 

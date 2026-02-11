@@ -1,15 +1,9 @@
 package com.LearnSpringBoot.InternalWorkingSpringBoot.Security;
 
 import com.LearnSpringBoot.InternalWorkingSpringBoot.dto.AuthDTO.*;
-import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.EmailVerificationToken;
-import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.Patient;
-import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.RefreshToken;
-import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.User;
+import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.*;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.type.RoleType;
-import com.LearnSpringBoot.InternalWorkingSpringBoot.repository.EmailVerificationTokenRepository;
-import com.LearnSpringBoot.InternalWorkingSpringBoot.repository.PatientRepository;
-import com.LearnSpringBoot.InternalWorkingSpringBoot.repository.RefreshTokenRepository;
-import com.LearnSpringBoot.InternalWorkingSpringBoot.repository.UserRepository;
+import com.LearnSpringBoot.InternalWorkingSpringBoot.repository.*;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.service.RefreshTokenService;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,11 +15,18 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AuthService {
 
-//    private static final int expireyminit = 15;
+    private static final int expireyminit = 15;
+
+//    private final PasswordResetToken passwordResetToken;
+
+    private final RefreshTokenRepository refreshTokenRepository;
+
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
 
     private final EmailVerificationTokenRepository emailVerificationTokenRepository;
 
@@ -41,7 +42,10 @@ public class AuthService {
 
     private final UserRepository userRepository;
 
-    public AuthService(EmailVerificationTokenRepository emailVerificationTokenRepository, RefreshTokenService refreshTokenService, PatientRepository patientRepository, PasswordEncoder passwordEncoder, AuthUtill authUtill, AuthenticationManager authenticationManager, UserRepository userRepository) {
+    public AuthService(  RefreshTokenRepository refreshTokenRepository, PasswordResetTokenRepository passwordResetTokenRepository, EmailVerificationTokenRepository emailVerificationTokenRepository, RefreshTokenService refreshTokenService, PatientRepository patientRepository, PasswordEncoder passwordEncoder, AuthUtill authUtill, AuthenticationManager authenticationManager, UserRepository userRepository) {
+//        this.passwordResetToken = passwordResetToken;
+        this.refreshTokenRepository = refreshTokenRepository;
+        this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.emailVerificationTokenRepository = emailVerificationTokenRepository;
         this.refreshTokenService = refreshTokenService;
         this.patientRepository = patientRepository;
@@ -127,5 +131,45 @@ public class AuthService {
 
         emailVerificationTokenRepository.delete(emailVerificationToken);
         return new MessageResponseDTO("Email Verified Successfully ..!");
+    }
+
+
+    public MessageResponseDTO forgotPassword(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(()->new RuntimeException("User not found ..!"));
+
+        String token = UUID.randomUUID().toString();
+
+        PasswordResetToken passwordResetToken1 = new PasswordResetToken();
+        passwordResetToken1.setToken(token);
+        passwordResetToken1.setUser(user);
+        passwordResetToken1.setExpiryDate(LocalDateTime.now().plusMinutes(expireyminit));
+
+        passwordResetTokenRepository.save(passwordResetToken1);
+        System.out.println("Password reset token "+token);
+
+        return new MessageResponseDTO("Password reset link sent to your email ...!");
+    }
+
+    public MessageResponseDTO resetPassword(String token, String newPassword) {
+        PasswordResetToken passwordResetToken1 = passwordResetTokenRepository
+                .findByToken(token).orElseThrow(()->new IllegalArgumentException("Invalid Token ..!"));
+
+        if(passwordResetToken1.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Token Expired ..! ");
+        }
+
+        User user = passwordResetToken1.getUser();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        passwordResetTokenRepository.delete(passwordResetToken1);
+        return new MessageResponseDTO("Password Reset Successfully ..!");
+    }
+
+    public MessageResponseDTO Logout(String refreshToken) {
+        RefreshToken token = refreshTokenRepository.findByToken(refreshToken).orElseThrow(()->new IllegalArgumentException("Invalid Refresh Token"));
+
+        refreshTokenRepository.delete(token);
+        return new MessageResponseDTO("Logged out Successfully ..!");
     }
 }

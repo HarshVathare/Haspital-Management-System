@@ -35,4 +35,22 @@ public class AuthController {
     public ResponseEntity<MessageResponseDTO> verifyEmail(@RequestBody VerifyEmailRequestDTO verifyEmailRequestDTO) {
         return ResponseEntity.ok(authService.verifyEmail(verifyEmailRequestDTO.getToken()));
     }
+
+    // Forget Password
+    @PostMapping("/forgot-password")
+    public ResponseEntity<MessageResponseDTO> forgotPassword(@RequestBody ForgetPasswordRequestDTO forgetPasswordRequestDTO) {
+        return ResponseEntity.ok(authService.forgotPassword(forgetPasswordRequestDTO.getEmail()));
+    }
+
+    // Reset Password
+    @PostMapping("/reset-password")
+    public ResponseEntity<MessageResponseDTO> resetPassword(@RequestBody ResetPasswordRequestDTO resetPasswordRequestDTO) {
+        return ResponseEntity.ok(authService.resetPassword(resetPasswordRequestDTO.getToken(), resetPasswordRequestDTO.getNewPassword()));
+    }
+
+    // Reset Password
+    @PostMapping("/logout")
+    public ResponseEntity<MessageResponseDTO> Logout(@RequestBody Logout logout) {
+        return ResponseEntity.ok(authService.Logout(logout.getRefreshToken()));
+    }
 }

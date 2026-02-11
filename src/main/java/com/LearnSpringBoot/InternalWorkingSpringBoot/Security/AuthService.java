@@ -1,10 +1,12 @@
 package com.LearnSpringBoot.InternalWorkingSpringBoot.Security;
 
 import com.LearnSpringBoot.InternalWorkingSpringBoot.dto.AuthDTO.*;
+import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.EmailVerificationToken;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.Patient;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.RefreshToken;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.User;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.type.RoleType;
+import com.LearnSpringBoot.InternalWorkingSpringBoot.repository.EmailVerificationTokenRepository;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.repository.PatientRepository;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.repository.RefreshTokenRepository;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.repository.UserRepository;
@@ -16,13 +18,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
 
 @Service
 public class AuthService {
 
-//    private final RefreshTokenRepository refreshTokenRepository;
+//    private static final int expireyminit = 15;
+
+    private final EmailVerificationTokenRepository emailVerificationTokenRepository;
+
     private final RefreshTokenService refreshTokenService;
 
     private final PatientRepository patientRepository;
@@ -35,7 +41,8 @@ public class AuthService {
 
     private final UserRepository userRepository;
 
-    public AuthService(RefreshTokenService refreshTokenService, PatientRepository patientRepository, PasswordEncoder passwordEncoder, AuthUtill authUtill, AuthenticationManager authenticationManager, UserRepository userRepository) {
+    public AuthService(EmailVerificationTokenRepository emailVerificationTokenRepository, RefreshTokenService refreshTokenService, PatientRepository patientRepository, PasswordEncoder passwordEncoder, AuthUtill authUtill, AuthenticationManager authenticationManager, UserRepository userRepository) {
+        this.emailVerificationTokenRepository = emailVerificationTokenRepository;
         this.refreshTokenService = refreshTokenService;
         this.patientRepository = patientRepository;
         this.passwordEncoder = passwordEncoder;
@@ -102,5 +109,23 @@ public class AuthService {
 
 
         return new SignupResponceDTO(savedUser.getId(), savedUser.getUsername());
+    }
+
+
+    public MessageResponseDTO verifyEmail(String token) {
+
+        EmailVerificationToken emailVerificationToken = emailVerificationTokenRepository
+                .findByToken(token).orElseThrow(()->new IllegalArgumentException("Invalid Token ..!"));
+
+        if(emailVerificationToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Token Expired ..! ");
+        }
+
+        User user = emailVerificationToken.getUser();
+        user.setEmail(user.getEmail());
+        userRepository.save(user);
+
+        emailVerificationTokenRepository.delete(emailVerificationToken);
+        return new MessageResponseDTO("Email Verified Successfully ..!");
     }
 }

@@ -29,4 +29,10 @@ public class AuthController {
     public ResponseEntity<RefreshTokenResponceDTO> RefreshToken(@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO) {
         return ResponseEntity.ok(authService.getRefreshToken(refreshTokenRequestDTO));
     }
+
+    //Verify email
+    @PostMapping("/verify-email")
+    public ResponseEntity<MessageResponseDTO> verifyEmail(@RequestBody VerifyEmailRequestDTO verifyEmailRequestDTO) {
+        return ResponseEntity.ok(authService.verifyEmail(verifyEmailRequestDTO.getToken()));
+    }
 }

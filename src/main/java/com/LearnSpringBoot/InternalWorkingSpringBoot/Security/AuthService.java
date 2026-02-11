@@ -2,10 +2,13 @@ package com.LearnSpringBoot.InternalWorkingSpringBoot.Security;
 
 import com.LearnSpringBoot.InternalWorkingSpringBoot.dto.AuthDTO.*;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.Patient;
+import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.RefreshToken;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.User;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.entity.type.RoleType;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.repository.PatientRepository;
+import com.LearnSpringBoot.InternalWorkingSpringBoot.repository.RefreshTokenRepository;
 import com.LearnSpringBoot.InternalWorkingSpringBoot.repository.UserRepository;
+import com.LearnSpringBoot.InternalWorkingSpringBoot.service.RefreshTokenService;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +22,9 @@ import java.util.Optional;
 @Service
 public class AuthService {
 
+//    private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenService refreshTokenService;
+
     private final PatientRepository patientRepository;
 
     private final PasswordEncoder passwordEncoder;
@@ -29,7 +35,8 @@ public class AuthService {
 
     private final UserRepository userRepository;
 
-    public AuthService(PatientRepository patientRepository, PasswordEncoder passwordEncoder, AuthUtill authUtill, AuthenticationManager authenticationManager, UserRepository userRepository) {
+    public AuthService(RefreshTokenService refreshTokenService, PatientRepository patientRepository, PasswordEncoder passwordEncoder, AuthUtill authUtill, AuthenticationManager authenticationManager, UserRepository userRepository) {
+        this.refreshTokenService = refreshTokenService;
         this.patientRepository = patientRepository;
         this.passwordEncoder = passwordEncoder;
         this.authUtill = authUtill;
@@ -45,10 +52,27 @@ public class AuthService {
         User user = (User) authentication.getPrincipal(); //All data convert to user type
         //After getting user data you can create token easily
 
+        //Access token
         String token = authUtill.generateAccessToken(user);
 
-        return new LoginResponceDTO(token, user.getId());
+        //Access Refresh token
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
 
+        //Pass the access and refresh token
+        return new LoginResponceDTO(token, user.getId(), refreshToken.getToken() );
+
+    }
+
+    //Service of refresh token
+    public RefreshTokenResponceDTO getRefreshToken(RefreshTokenRequestDTO refreshTokenRequestDTO) {
+          RefreshToken refreshToken = refreshTokenService.findByToken(refreshTokenRequestDTO.getRefreshToken())
+                  .map(refreshTokenService::verifyExpiration)
+                  .orElseThrow(()->new RuntimeException("Invalid refresh token ..!"));
+
+          User user = refreshToken.getUser();
+          String newAccessToken = authUtill.generateAccessToken(user);
+
+          return new RefreshTokenResponceDTO(newAccessToken , refreshToken.getToken());
     }
 
     public SignupResponceDTO Signup(SignupRequestDTO signupRequestDTO) {
@@ -78,10 +102,5 @@ public class AuthService {
 
 
         return new SignupResponceDTO(savedUser.getId(), savedUser.getUsername());
-    }
-
-
-    public @Nullable RefreshTokenResponceDTO getRefreshToken(RefreshTokenRequestDTO refreshTokenRequestDTO) {
-         return null;
     }
 }

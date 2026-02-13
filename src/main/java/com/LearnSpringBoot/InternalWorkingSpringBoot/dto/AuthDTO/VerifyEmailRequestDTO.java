@@ -1,17 +1,17 @@
 package com.LearnSpringBoot.InternalWorkingSpringBoot.dto.AuthDTO;
 
 public class VerifyEmailRequestDTO {
-    private String token;
+    private String jwt;
 
-    public VerifyEmailRequestDTO(String token) {
-        this.token = token;
+    public VerifyEmailRequestDTO(String jwt) {
+        this.jwt = jwt;
     }
 
-    public String getToken() {
-        return token;
+    public String getJwt() {
+        return jwt;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setJwt(String jwt) {
+        this.jwt = jwt;
     }
 }

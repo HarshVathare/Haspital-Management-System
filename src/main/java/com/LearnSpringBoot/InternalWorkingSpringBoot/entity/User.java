@@ -113,4 +113,8 @@ public class User implements UserDetails {
     public void setRoles(Set<RoleType> roles) {
         this.roles = roles;
     }
+
+    public boolean setEmailVerified(boolean b) {
+        return b;
+    }
 }

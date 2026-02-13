@@ -69,6 +69,15 @@ public class AuthService {
         //Access Refresh token
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
 
+//        String jwt = authUtill.generateAccessToken(user);
+
+        EmailVerificationToken token2 = new EmailVerificationToken();
+        token2.setJwt(token);
+        token2.setUser(user);
+        token2.setExpiryDate(LocalDateTime.now().plusMinutes(15));
+
+        emailVerificationTokenRepository.save(token2);
+
         //Pass the access and refresh token
         return new LoginResponceDTO(token, user.getId(), refreshToken.getToken() );
 
@@ -116,22 +125,43 @@ public class AuthService {
     }
 
 
-    public MessageResponseDTO verifyEmail(String token) {
+//    public MessageResponseDTO verifyEmail(String jwt) {
+//
+//        EmailVerificationToken emailVerificationToken = emailVerificationTokenRepository
+//                .findByJwt(jwt).orElseThrow(()->new IllegalArgumentException("Invalid Token ..!"));
+//
+//        if(emailVerificationToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+//            throw new RuntimeException("Token Expired ..! ");
+//        }
+//
+//        User user = emailVerificationToken.getUser();
+//        user.setEmail(user.getEmail());
+//        userRepository.save(user);
+//
+//        emailVerificationTokenRepository.delete(emailVerificationToken);
+//        return new MessageResponseDTO("Email Verified Successfully ..!");
+//    }
 
-        EmailVerificationToken emailVerificationToken = emailVerificationTokenRepository
-                .findByToken(token).orElseThrow(()->new IllegalArgumentException("Invalid Token ..!"));
+    public MessageResponseDTO verifyEmail(String jwt) {
 
-        if(emailVerificationToken.getExpiryDate().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("Token Expired ..! ");
+        EmailVerificationToken token = emailVerificationTokenRepository
+                .findByJwt(jwt)
+                .orElseThrow(() -> new RuntimeException("Token not found in database"));
+
+        if(token.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Token Expired");
         }
 
-        User user = emailVerificationToken.getUser();
-        user.setEmail(user.getEmail());
+
+        User user = token.getUser();
+        user.setEmailVerified(true);
         userRepository.save(user);
 
-        emailVerificationTokenRepository.delete(emailVerificationToken);
-        return new MessageResponseDTO("Email Verified Successfully ..!");
+        emailVerificationTokenRepository.delete(token);
+
+        return new MessageResponseDTO("Email Verified Successfully");
     }
+
 
 
     public MessageResponseDTO forgotPassword(String email) {

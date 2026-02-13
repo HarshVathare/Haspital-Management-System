@@ -33,7 +33,7 @@ public class AuthController {
     //Verify email
     @PostMapping("/verify-email")
     public ResponseEntity<MessageResponseDTO> verifyEmail(@RequestBody VerifyEmailRequestDTO verifyEmailRequestDTO) {
-        return ResponseEntity.ok(authService.verifyEmail(verifyEmailRequestDTO.getToken()));
+        return ResponseEntity.ok(authService.verifyEmail(verifyEmailRequestDTO.getJwt()));
     }
 
     // Forget Password

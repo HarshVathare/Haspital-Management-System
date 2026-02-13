@@ -12,38 +12,23 @@ public class EmailVerificationToken {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String token;
+    private String jwt;
 
     private LocalDateTime expiryDate;
 
+    @MapsId
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public EmailVerificationToken() {
+    public EmailVerificationToken() {}
+
+    public String getJwt() {
+        return jwt;
     }
 
-    public EmailVerificationToken(Long id, String token, LocalDateTime expiryDate, User user) {
-        this.id = id;
-        this.token = token;
-        this.expiryDate = expiryDate;
-        this.user = user;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
+    public void setJwt(String jwt) {
+        this.jwt = jwt;
     }
 
     public LocalDateTime getExpiryDate() {
@@ -62,3 +47,5 @@ public class EmailVerificationToken {
         this.user = user;
     }
 }
+
+

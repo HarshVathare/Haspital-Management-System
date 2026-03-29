@@ -135,7 +135,7 @@ src/main/java/com/example/hms
 ---
 
  System – API Endpoint List
-🔐 1. Authentication &    Authorization
+🔐 1. Authentication & Authorization
 
 Public
 POST   /api/auth/register
@@ -147,23 +147,18 @@ GET    /api/auth/verify-email
 POST   /api/auth/logout
 
  Admin
-
-```
+ 
 PUT /api/admin/convert-to-doctor/{userId}
 PUT /api/admin/approve-doctor/{doctorId}
 PUT /api/admin/block-user/{userId}
-```
+
  Appointment
 
-```
 POST /api/appointments
 GET  /api/appointments/patient/{id}
 PUT  /api/appointments/{id}/cancel
-```
 
  Insurance
 
-```
 POST /api/insurance/claim
 PUT  /api/insurance/claims/{id}/approve
-```
